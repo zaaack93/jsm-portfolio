@@ -1,37 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import {images} from '../../constants'
 
 import './About.scss'
-
-const abouts = [
-  {
-    title:'Web Development',
-    description: "I am a good web developer",
-    imgUrl:images.about01
-  },
-  {
-    title:'UI/UX',
-    description: "I am a good web developer",
-    imgUrl:images.about02
-  },
-  {
-    title:'Shopify developer',
-    description: "I am a good web developer",
-    imgUrl:images.about03
-  },
-  {
-    title:'FullStack development',
-    description: "I am a good web developer",
-    imgUrl:images.about04
-  }
-]
+import { client, urlFor } from '../../client'
 
 const About = () => {
+  const [abouts,setAbouts]=useState([])
+
+  useEffect(()=> {
+    client
+			.fetch(
+				`*[_type == "abouts"]`
+			)
+			.then((data) => setAbouts(data))
+			.catch(console.error);
+  },[])
   return (
     <>
       <h2 className="head-text">
-        I Know That <span>Good Design</span> <br />means <span>Good Business</span>
+        I Know That <span>Good Apps</span> <br />means <span>Good Business</span>
       </h2>
       <div className="app__profiles">
         {
@@ -44,7 +32,7 @@ const About = () => {
             >
               {
                 about.imgUrl && (
-                  <img src={about.imgUrl} alt={about.title} />
+                  <img src={urlFor(about.imgUrl)} alt={about.title} />
                 )
               }
               <h2 className="bold-text" style={{marginTop:20}}>{about.title}</h2>
